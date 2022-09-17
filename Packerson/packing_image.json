@@ -1,0 +1,32 @@
+{
+  "variables": {
+    "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "eu-west-2",
+    "source_ami": "ami-05a8c865b4de3b127",
+    "instance_type": "t2.micro",
+    "ssh_username": "ubuntu",    
+    "tags": {
+      "OS_Version": "Ubuntu"      
+    },    
+    "ami_name": "packer-of-dockpacher {{timestamp}}"
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "inline": [
+      "sleep 30",
+      "sudo apt-get update",
+      "sudo apt-get install -y docker.io",
+      "sudo apt install -y apache2",
+      "sudo service apache2 start",
+      "sudo chown -R $USER:$USER /var/www/html",
+      "sudo git clone https://github.com/AbdulBhashith/portfolio.git",
+      "sudo mv portfolio/* /var/www/html"
+    ]
+  }]
+}
