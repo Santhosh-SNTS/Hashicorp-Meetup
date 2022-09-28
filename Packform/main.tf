@@ -29,7 +29,7 @@ data "aws_ami" "packer_image" {
 
 resource "aws_instance" "my_server" {
   ami           = data.aws_ami.packer_image.id
-  instance_type = "t2.medium"
+  instance_type = "t2.large"
   vpc_security_group_ids = [ aws_security_group.hug-sg.id ]
   key_name = aws_key_pair.hugkey.key_name
 	tags = {
